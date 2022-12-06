@@ -10,6 +10,8 @@ speed = 77
 
 [node name="ActualPlatform" type="KinematicBody2D" parent="."]
 position = Vector2( 0, -64 )
+motion/sync_to_physics = true
+moving_platform_apply_velocity_on_leave = 2
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="ActualPlatform"]
 polygon = PoolVector2Array( -80, -16, 80, -16, 80, 16, -80, 16 )

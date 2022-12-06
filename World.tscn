@@ -25,9 +25,6 @@ tile_data = PoolIntArray( 65476, 2, 0, 65477, 2, 0, 65478, 2, 0, 65479, 2, 0, 65
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( -1557, 700 )
-max_speed = 540
-gravity_acceleration = 6720
-jump_force = 1700
 
 [node name="Platforms" type="Node2D" parent="."]
 
