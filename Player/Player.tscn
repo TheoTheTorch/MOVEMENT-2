@@ -13,6 +13,7 @@ z_index = 10
 collision_mask = 14
 collision/safe_margin = 0.04
 script = ExtResource( 1 )
+jump_force = 1800.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2( -16, 8 )
@@ -33,11 +34,5 @@ shape = SubResource( 2 )
 [node name="Sprite" type="Node2D" parent="."]
 
 [node name="Polygon2D" type="Polygon2D" parent="Sprite"]
-position = Vector2( 0, 17.5 )
-scale = Vector2( 1, 0.635417 )
 color = Color( 0.964706, 0.952941, 0.298039, 1 )
-polygon = PoolVector2Array( -16, -52.7213, -16, -2.36065, 16, -2.36065, 16, -52.7213 )
-
-[node name="Polygon2D2" type="Polygon2D" parent="Sprite"]
-position = Vector2( -4, 29 )
-polygon = PoolVector2Array( 12, -29, 16, -32, 16, -40, -4, -37 )
+polygon = PoolVector2Array( -16, -16, -16, 16, 16, 16, 16, -16 )

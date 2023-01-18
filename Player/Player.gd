@@ -19,7 +19,7 @@ export var jump_force : float = 1650
 export var jump_cut : float = 0.25
 export var jump_gravity_max : float = 1020
 export var jump_hang_treshold : float = 2.0
-export var jump_hang_gravity_mult : float = 0.001
+export var jump_hang_gravity_mult : float = 0.1
 # Timers
 export var jump_coyote : float = 0.08
 export var jump_buffer : float = 0.1
@@ -47,6 +47,7 @@ func _physics_process(delta: float) -> void:
 	
 	apply_gravity(delta) # apply gravity only after jump_logic
 	apply_velocity()
+	print(velocity)
 
 
 func apply_velocity() -> void:
@@ -70,6 +71,7 @@ func x_movement(delta: float) -> void:
 		accel_rate = 0
 	
 	velocity.x += delta * (target_speed - velocity.x) * accel_rate
+	if abs(velocity.x) < 0.1: velocity.x = 0 # Too small velocities make the player jitter instead of stopping
 	set_direction(x_dir)
 
 func set_direction(hor_direction) -> void:
