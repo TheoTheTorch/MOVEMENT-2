@@ -5,19 +5,18 @@ var velocity := Vector2(0,0)
 var face_direction := 1
 var x_dir := 1
 
-export var max_speed: float = 520
-export var acceleration: float = 32
-export var deceleration: float = 96
-export var air_acceleration : float = 48
-export var air_deceleration : float = 96
+export var max_speed: float = 560
+export var acceleration: float = 2880
+export var turning_acceleration : float = 9600
+export var deceleration: float = 3200
 
-export var gravity_acceleration : float = 7680
-export var gravity_max : float = 700
+export var gravity_acceleration : float = 3840
+export var gravity_max : float = 1020
 
 # JUMP VARAIABLES ------------------- #
-export var jump_force : float = 1650
+export var jump_force : float = 1400
 export var jump_cut : float = 0.25
-export var jump_gravity_max : float = 1020
+export var jump_gravity_max : float = 500
 export var jump_hang_treshold : float = 2.0
 export var jump_hang_gravity_mult : float = 0.1
 # Timers
@@ -33,8 +32,8 @@ var is_jumping := false
 # All iputs we want to keep track of
 func get_input() -> Dictionary:
 	return {
-		"horizontal": int(Input.is_action_pressed("ui_right")) - int(Input.is_action_pressed("ui_left")),
-		"vertical": int(Input.is_action_pressed("ui_down")) - int(Input.is_action_pressed("ui_up")),
+		"x": int(Input.is_action_pressed("ui_right")) - int(Input.is_action_pressed("ui_left")),
+		"y": int(Input.is_action_pressed("ui_down")) - int(Input.is_action_pressed("ui_up")),
 		"just_jump": Input.is_action_just_pressed("jump") == true,
 		"jump": Input.is_action_pressed("jump") == true,
 		"released_jump": Input.is_action_just_released("jump") == true,
@@ -57,24 +56,28 @@ func apply_velocity() -> void:
 		velocity = move_and_slide_with_snap(velocity, Vector2(0, 16), Vector2.UP)
 
 func x_movement(delta: float) -> void:
-	x_dir = get_input()["horizontal"]
+	x_dir = get_input()["x"]
 	
-	var target_speed : float = x_dir * max_speed
-	var accel_rate : float = acceleration if (abs(target_speed) > 0.01) else deceleration
+	# Stop if we're not doing movement inputs.
+	if x_dir == 0: 
+		velocity.x = Vector2(velocity.x, 0).move_toward(Vector2(0,0), deceleration * delta).x
+		return
 	
-	# if we aren't grounded, use air acceleration / deceleration instead
-	if not is_on_floor():
-		accel_rate = air_acceleration if (abs(target_speed) > 0.01) else air_deceleration
 	
-	# above max speed, don't accelerate nor decelerate (This keeps our momentum gained from outside or slopes)
-	if abs(velocity.x) > max_speed and sign(velocity.x) == x_dir and x_dir != 0:
-		accel_rate = 0
+	# If we are doing movement inputs and above max speed, don't accelerate nor decelerate
+	# Except if we are turning
+	# (This keeps our momentum gained from outside or slopes)
+	if abs(velocity.x) >= max_speed and sign(velocity.x) == x_dir:
+		return
 	
-	velocity.x += delta * (target_speed - velocity.x) * accel_rate
-	if abs(velocity.x) < 0.1: velocity.x = 0 # Too small velocities make the player jitter instead of stopping
-	set_direction(x_dir)
+	# Are we turning?
+	var accel_rate : float = acceleration if sign(velocity.x) == x_dir else turning_acceleration
+	# Accelerate
+	velocity.x += x_dir * accel_rate * delta
+	set_direction(x_dir) # This is purely for visuals
 
 func set_direction(hor_direction) -> void:
+	# This is purely for visuals
 	# Turning relies on the scale of the player
 	# To animate, only scale the sprite
 	if hor_direction == 0: return
@@ -103,7 +106,9 @@ func jump_logic(_delta: float) -> void:
 #	if get_input()["jump"]:pass
 	
 	# Cut the velocity if let go of jump. This means our jumpheight is varaiable
-	if get_input()["released_jump"]:
+	# This should only happen when moving upwards, as doing this while falling would lead to
+	# The ability to studder our player mid falling
+	if get_input()["released_jump"] and velocity.y < 0:
 		velocity.y *= jump_cut
 	
 	# This way we won't start slowly descending / floating once hit a ceiling
@@ -118,12 +123,12 @@ func apply_gravity(delta: float) -> void:
 	if jump_coyote_timer > 0: return
 	
 	# Normal gravity limit
-	if not velocity.y > gravity_max:
+	if velocity.y <= gravity_max:
 		applied_gravity = gravity_acceleration * delta
 	
-	# If falling, the limit is jump_gravity_max
-	if velocity.y > 0 and not velocity.y > jump_gravity_max:
-		applied_gravity = gravity_acceleration * delta
+	# If moving upwards while jumping, the limit is jump_gravity_max to achieve lower gravity
+	if (is_jumping and velocity.y < 0) and velocity.y > jump_gravity_max:
+		applied_gravity = 0
 	
 	# Lower the gravity at the peak of our jump (where velocity is the smallest)
 	if is_jumping and abs(velocity.y) < jump_hang_treshold:
