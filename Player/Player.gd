@@ -1,6 +1,6 @@
 extends KinematicBody2D
 
-# Basic movement varaiables
+# BASIC MOVEMENT VARAIABLES ---------------- #
 var velocity := Vector2(0,0)
 var face_direction := 1
 var x_dir := 1
@@ -9,9 +9,12 @@ export var max_speed: float = 560
 export var acceleration: float = 2880
 export var turning_acceleration : float = 9600
 export var deceleration: float = 3200
+# ------------------------------------------ #
 
+# GRAVITY ----- #
 export var gravity_acceleration : float = 3840
 export var gravity_max : float = 1020
+# ------------- #
 
 # JUMP VARAIABLES ------------------- #
 export var jump_force : float = 1400
@@ -46,7 +49,6 @@ func _physics_process(delta: float) -> void:
 	
 	apply_gravity(delta) # apply gravity only after jump_logic
 	apply_velocity()
-	print(velocity)
 
 
 func apply_velocity() -> void:
