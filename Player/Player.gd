@@ -1,4 +1,12 @@
 extends KinematicBody2D
+# This character controller was created with the intent of being a decent starting point for Platformers.
+# 
+# Instead of teaching the basics, I tried to implement more advanced considerations.
+# That's why I call it 'Movement 2'. This is a sequel to learning demos of similar a kind.
+# Beyond coyote time and a jump buffer I go through all the things listed in the following video:
+# https://www.youtube.com/watch?v=2S3g8CgBG1g
+# Except for separate air and ground acceleration, as I don't think it's necessary.
+
 
 # BASIC MOVEMENT VARAIABLES ---------------- #
 var velocity := Vector2(0,0)
@@ -39,15 +47,16 @@ func get_input() -> Dictionary:
 		"y": int(Input.is_action_pressed("ui_down")) - int(Input.is_action_pressed("ui_up")),
 		"just_jump": Input.is_action_just_pressed("jump") == true,
 		"jump": Input.is_action_pressed("jump") == true,
-		"released_jump": Input.is_action_just_released("jump") == true,
+		"released_jump": Input.is_action_just_released("jump") == true
 	}
+
 
 func _physics_process(delta: float) -> void:
 	x_movement(delta)
 	jump_logic(delta)
-	timers(delta)
+	apply_gravity(delta)
 	
-	apply_gravity(delta) # apply gravity only after jump_logic
+	timers(delta)
 	apply_velocity()
 
 
@@ -57,6 +66,7 @@ func apply_velocity() -> void:
 	else:
 		velocity = move_and_slide_with_snap(velocity, Vector2(0, 16), Vector2.UP)
 
+
 func x_movement(delta: float) -> void:
 	x_dir = get_input()["x"]
 	
@@ -65,7 +75,6 @@ func x_movement(delta: float) -> void:
 		velocity.x = Vector2(velocity.x, 0).move_toward(Vector2(0,0), deceleration * delta).x
 		return
 	
-	
 	# If we are doing movement inputs and above max speed, don't accelerate nor decelerate
 	# Except if we are turning
 	# (This keeps our momentum gained from outside or slopes)
@@ -73,34 +82,41 @@ func x_movement(delta: float) -> void:
 		return
 	
 	# Are we turning?
+	# Deciding between acceleration and turn_acceleration
 	var accel_rate : float = acceleration if sign(velocity.x) == x_dir else turning_acceleration
+	
 	# Accelerate
 	velocity.x += x_dir * accel_rate * delta
+	
 	set_direction(x_dir) # This is purely for visuals
+
 
 func set_direction(hor_direction) -> void:
 	# This is purely for visuals
 	# Turning relies on the scale of the player
 	# To animate, only scale the sprite
-	if hor_direction == 0: return
+	if hor_direction == 0:
+		return
 	apply_scale(Vector2(hor_direction * face_direction, 1)) # flip
-	face_direction = x_dir # remember direction
+	face_direction = hor_direction # remember direction
+
 
 func jump_logic(_delta: float) -> void:
-	
 	# Reset our jump requirements
 	if is_on_floor():
 		jump_coyote_timer = jump_coyote
 		is_jumping = false
-	if get_input()["just_jump"]: jump_buffer_timer = jump_buffer
+	if get_input()["just_jump"]:
+		jump_buffer_timer = jump_buffer
 	
 	# Jump if grounded, there is jump input, and we aren't jumping already
 	if jump_coyote_timer > 0 and jump_buffer_timer > 0 and not is_jumping:
 		is_jumping = true
 		jump_coyote_timer = 0
 		jump_buffer_timer = 0
-		 # if falling, account for that lost speed
-		if velocity.y > 0: velocity.y -= velocity.y
+		 # If falling, account for that lost speed
+		if velocity.y > 0:
+			velocity.y -= velocity.y
 		
 		velocity.y = -jump_force
 	
@@ -111,18 +127,20 @@ func jump_logic(_delta: float) -> void:
 	# This should only happen when moving upwards, as doing this while falling would lead to
 	# The ability to studder our player mid falling
 	if get_input()["released_jump"] and velocity.y < 0:
-		velocity.y *= jump_cut
+		velocity.y -= (jump_cut * velocity.y)
 	
 	# This way we won't start slowly descending / floating once hit a ceiling
-	if is_on_ceiling(): velocity.y = jump_hang_treshold + 1.0
-
+	# The value added to the treshold is arbritary,
+	# But it solves a problem where jumping into 
+	if is_on_ceiling(): velocity.y = jump_hang_treshold + 100.0
 
 
 func apply_gravity(delta: float) -> void:
 	var applied_gravity : float = 0
 	
 	# No gravity if we are grounded
-	if jump_coyote_timer > 0: return
+	if jump_coyote_timer > 0:
+		return
 	
 	# Normal gravity limit
 	if velocity.y <= gravity_max:
@@ -137,6 +155,7 @@ func apply_gravity(delta: float) -> void:
 		applied_gravity *= jump_hang_gravity_mult
 	
 	velocity.y += applied_gravity
+
 
 func timers(delta: float) -> void:
 	# Using timer nodes here would mean unnececary functions and node calls

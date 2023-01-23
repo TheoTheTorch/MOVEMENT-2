@@ -6,7 +6,6 @@
 modulate = Color( 0.376471, 0.976471, 0.596078, 1 )
 script = ExtResource( 1 )
 move_to = Vector2( 0, -64 )
-speed = 77
 
 [node name="ActualPlatform" type="KinematicBody2D" parent="."]
 position = Vector2( 0, -64 )
