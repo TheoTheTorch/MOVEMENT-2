@@ -12,7 +12,8 @@ config_version=4
 
 config/name="MOVEMENT 2"
 run/main_scene="res://World/World.tscn"
-config/icon="res://icon.png"
+config/icon="res://Art/icon.png"
+config/windows_native_icon="res://icon.ico"
 
 [display]
 
