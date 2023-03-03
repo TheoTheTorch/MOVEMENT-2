@@ -1,6 +1,6 @@
-extends KinematicBody2D
+extends CharacterBody2D
 
-export var rotation_speed : float = 4.0
+@export var rotation_speed : float = 4.0
 
 
 func _physics_process(delta: float) -> void:

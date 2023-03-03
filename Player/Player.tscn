@@ -1,52 +1,57 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=3 uid="uid://cvsmjm2ixm5nq"]
 
-[ext_resource path="res://Player/Player.gd" type="Script" id=1]
-[ext_resource path="res://Player/Sprite.gd" type="Script" id=2]
+[ext_resource type="Script" path="res://Player/Player.gd" id="1"]
+[ext_resource type="Script" path="res://Player/Sprite.gd" id="2"]
 
-[sub_resource type="RectangleShape2D" id=2]
-extents = Vector2( 16, 12 )
+[sub_resource type="RectangleShape2D" id="2"]
+size = Vector2(16, 12)
 
-[sub_resource type="RayShape2D" id=1]
+[sub_resource type="SeparationRayShape2D" id="1"]
 length = 8.0
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id="3"]
 resource_name = "Jump"
 length = 0.3
 step = 0.05
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath(".:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.3 ),
-"transitions": PoolRealArray( 1.68179, 1, 1 ),
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1.68179, 1, 1),
 "update": 0,
-"values": [ Vector2( 1, 1 ), Vector2( 0.8, 1.2 ), Vector2( 1, 1 ) ]
+"values": [Vector2(1, 1), Vector2(0.8, 1.2), Vector2(1, 1)]
 }
 
-[sub_resource type="Animation" id=4]
+[sub_resource type="Animation" id="4"]
 resource_name = "Land"
 length = 0.2
 tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
 tracks/0/path = NodePath(".:scale")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
 tracks/0/keys = {
-"times": PoolRealArray( 0, 0.1, 0.2 ),
-"transitions": PoolRealArray( 0.241484, 1, 1 ),
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(0.241484, 1, 1),
 "update": 0,
-"values": [ Vector2( 1, 1 ), Vector2( 1.4, 1 ), Vector2( 1, 1 ) ]
+"values": [Vector2(1, 1), Vector2(1.4, 1), Vector2(1, 1)]
 }
 
-[node name="Player" type="KinematicBody2D" groups=["Player"]]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1fmuu"]
+_data = {
+"Jump": SubResource("3"),
+"Land": SubResource("4")
+}
+
+[node name="Player" type="CharacterBody2D" groups=["Player"]]
 z_index = 10
 collision_mask = 14
-collision/safe_margin = 0.04
-script = ExtResource( 1 )
+script = ExtResource("1")
 acceleration = 4032.0
 turning_acceleration = 13440.0
 deceleration = 4480.0
@@ -56,31 +61,32 @@ jump_gravity_max = 1000.0
 jump_hang_gravity_mult = 0.05
 
 [node name="SquareCollisionShape" type="CollisionShape2D" parent="."]
-position = Vector2( 0, -4 )
-shape = SubResource( 2 )
+position = Vector2(0, -4)
+shape = SubResource("2")
 
 [node name="RaycastCollider1" type="CollisionShape2D" parent="."]
-position = Vector2( -16, 8 )
-shape = SubResource( 1 )
+position = Vector2(-16, 8)
+shape = SubResource("1")
 
 [node name="RaycastCollider2" type="CollisionShape2D" parent="."]
-position = Vector2( 0, 8 )
-shape = SubResource( 1 )
+position = Vector2(0, 8)
+shape = SubResource("1")
 
 [node name="RaycastCollider3" type="CollisionShape2D" parent="."]
-position = Vector2( 16, 8 )
-shape = SubResource( 1 )
+position = Vector2(16, 8)
+shape = SubResource("1")
 
-[node name="Sprite" type="Node2D" parent="."]
-position = Vector2( 0, 8 )
-script = ExtResource( 2 )
+[node name="Sprite2D" type="Node2D" parent="."]
+position = Vector2(0, 8)
+script = ExtResource("2")
 player_path = NodePath("..")
 
-[node name="Polygon2D" type="Polygon2D" parent="Sprite"]
-position = Vector2( 0, -8 )
-color = Color( 0.964706, 0.952941, 0.298039, 1 )
-polygon = PoolVector2Array( -16, -16, -16, 16, 16, 16, 16, -16 )
+[node name="Polygon2D" type="Polygon2D" parent="Sprite2D"]
+position = Vector2(0, -8)
+color = Color(0.964706, 0.952941, 0.298039, 1)
+polygon = PackedVector2Array(-16, -16, -16, 16, 16, 16, 16, -16)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite"]
-anims/Jump = SubResource( 3 )
-anims/Land = SubResource( 4 )
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite2D"]
+libraries = {
+"": SubResource("AnimationLibrary_1fmuu")
+}

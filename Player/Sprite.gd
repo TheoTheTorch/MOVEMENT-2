@@ -5,9 +5,9 @@ extends Node2D
 # https://www.youtube.com/results?search_query=godot+state+machine
 # Choose a video of your liking
 
-export var player_path : NodePath
-onready var Player := get_node(player_path)
-onready var Animator := $AnimationPlayer
+@export var player_path : NodePath
+@onready var Player := get_node(player_path)
+@onready var Animator := $AnimationPlayer
 
 var previous_frame_velocity := Vector2(0,0)
 
