@@ -7,11 +7,9 @@ modulate = Color(0.376471, 0.976471, 0.596078, 1)
 script = ExtResource("1")
 move_to = Vector2(0, -64)
 
-[node name="ActualPlatform" type="CharacterBody2D" parent="."]
-position = Vector2(0, -53.8765)
+[node name="ActualPlatform" type="AnimatableBody2D" parent="."]
+position = Vector2(0, -62.2077)
 collision_layer = 2
-floor_constant_speed = true
-platform_wall_layers = 2
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="ActualPlatform"]
 polygon = PackedVector2Array(-80, -16, 80, -16, 80, 16, -80, 16)

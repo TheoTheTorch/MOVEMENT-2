@@ -28,6 +28,7 @@ func _process(_delta: float) -> void:
 	queue_redraw()
 
 func _draw() -> void:
+	if line_width == 0: return
 	draw_line(move_to, -move_to, Color.WHITE, line_width)
 
 func start_tween(Moved) -> void:
