@@ -8,7 +8,7 @@ script = ExtResource("1")
 move_to = Vector2(0, -64)
 
 [node name="ActualPlatform" type="CharacterBody2D" parent="."]
-position = Vector2(0, -23.7873)
+position = Vector2(0, -53.8765)
 collision_layer = 2
 floor_constant_speed = true
 platform_wall_layers = 2
