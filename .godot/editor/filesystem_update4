@@ -1,0 +1,7 @@
+res://World/World.tscn
+res://Platforms/TileMap.tscn
+res://Player/Player.tscn
+res://Platforms/MovingPlatform.tscn
+res://Platforms/MovingPlatform.gd
+res://Player/Player.gd
+res://World/World.gd

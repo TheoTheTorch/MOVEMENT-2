@@ -1,11 +1,11 @@
 extends CharacterBody2D
-# This character controller was created with the intent of being a decent starting point for Platformers.
-# 
-# Instead of teaching the basics, I tried to implement more advanced considerations.
-# That's why I call it 'Movement 2'. This is a sequel to learning demos of similar a kind.
-# Beyond coyote time and a jump buffer I go through all the things listed in the following video:
-# https://www.youtube.com/watch?v=2S3g8CgBG1g
-# Except for separate air and ground acceleration, as I don't think it's necessary.
+## This character controller was created with the intent of being a decent starting point for Platformers.
+## 
+## Instead of teaching the basics, I tried to implement more advanced considerations.
+## That's why I call it 'Movement 2'. This is a sequel to learning demos of similar a kind.
+## Beyond coyote time and a jump buffer I go through all the things listed in the following video:
+## https://www.youtube.com/watch?v=2S3g8CgBG1g
+## Except for separate air and ground acceleration, as I don't think it's necessary.
 
 
 # BASIC MOVEMENT VARAIABLES ---------------- #

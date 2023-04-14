@@ -1,9 +1,10 @@
 @tool
 extends Node2D
-# Script controlling a moving platform (or spike, or anything else you might want to move).
-# Updating the move_to varaiable works in editor to speed up level design
-# This code can work with moving spikes and alike, all you need is swap out the reference to MovedObject.
-# And also Make the child an Area2D that reacts to the player collisions.
+## Script controlling a moving platform (or spike, or anything else you might want to move).
+##
+## Updating the move_to varaiable works in editor to speed up level design
+## This code can work with moving spikes and alike, all you need is swap out the reference to MovedObject.
+## And also Make the child an Area2D that reacts to the player collisions.
 
 
 @export var move_to := Vector2(0, -128) : set = set_move_to
@@ -13,8 +14,8 @@ func set_move_to(new_value: Vector2) -> void:
 		for child in get_children():
 			child.position = move_to
 
-@export var speed: int = 64
-@export var delay: float = 0.4
+@export var speed: int = 64 
+@export var delay: float = 0.4 ## delay (sec) before moving to move_to
 @export var line_width : float = 4.0
 
 func _ready() -> void:

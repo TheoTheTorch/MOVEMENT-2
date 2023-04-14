@@ -3,12 +3,11 @@ extends Camera2D
 # Camera script follwing a target (usually the player)
 # This camera is snapped to a grid, therefore only moves when the character exits a screen.
 
-export var target : NodePath
-export var align_time : float = 0.2
-export var screen_size := Vector2(1920, 1080)
+@export var target : NodePath
+@export var align_time : float = 0.2
+@export var screen_size := Vector2(1920, 1080)
 
-onready var Target = get_node_or_null(target)
-onready var Twee = $Tween
+@onready var Target = get_node_or_null(target)
 
 func _physics_process(_delta: float) -> void:
 	if not is_instance_valid(Target):

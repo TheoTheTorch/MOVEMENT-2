@@ -1,25 +1,20 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://dyq8g35t6hsjf"]
 
-[ext_resource path="res://Platforms/MovingPlatform.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://Platforms/MovingPlatform.gd" id="1"]
 
 [node name="Platform" type="Node2D"]
-modulate = Color( 0.376471, 0.976471, 0.596078, 1 )
-script = ExtResource( 1 )
-move_to = Vector2( 0, -64 )
+modulate = Color(0.376471, 0.976471, 0.596078, 1)
+script = ExtResource("1")
+move_to = Vector2(0, -64)
 
-[node name="ActualPlatform" type="KinematicBody2D" parent="."]
-position = Vector2( 0, -64 )
-motion/sync_to_physics = true
-moving_platform_apply_velocity_on_leave = 2
+[node name="ActualPlatform" type="CharacterBody2D" parent="."]
+position = Vector2(0, -23.7873)
+collision_layer = 2
+floor_constant_speed = true
+platform_wall_layers = 2
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="ActualPlatform"]
-polygon = PoolVector2Array( -80, -16, 80, -16, 80, 16, -80, 16 )
-__meta__ = {
-"_editor_description_": ""
-}
+polygon = PackedVector2Array(-80, -16, 80, -16, 80, 16, -80, 16)
 
 [node name="Polygon2D" type="Polygon2D" parent="ActualPlatform"]
-polygon = PoolVector2Array( -80, -16, 80, -16, 80, 16, -80, 16 )
-__meta__ = {
-"_editor_description_": ""
-}
+polygon = PackedVector2Array(-80, -16, 80, -16, 80, 16, -80, 16)
