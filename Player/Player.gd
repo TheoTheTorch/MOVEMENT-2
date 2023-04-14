@@ -9,30 +9,30 @@ extends CharacterBody2D
 
 
 # BASIC MOVEMENT VARAIABLES ---------------- #
-
+var velocity := Vector2(0,0)
 var face_direction := 1
 var x_dir := 1
 
-@export var max_speed: float = 560
-@export var acceleration: float = 2880
-@export var turning_acceleration : float = 9600
-@export var deceleration: float = 3200
+export var max_speed: float = 560
+export var acceleration: float = 2880
+export var turning_acceleration : float = 9600
+export var deceleration: float = 3200
 # ------------------------------------------ #
 
 # GRAVITY ----- #
-@export var gravity_acceleration : float = 3840
-@export var gravity_max : float = 1020
+export var gravity_acceleration : float = 3840
+export var gravity_max : float = 1020
 # ------------- #
 
 # JUMP VARAIABLES ------------------- #
-@export var jump_force : float = 1400
-@export var jump_cut : float = 0.25
-@export var jump_gravity_max : float = 500
-@export var jump_hang_treshold : float = 2.0
-@export var jump_hang_gravity_mult : float = 0.1
+export var jump_force : float = 1400
+export var jump_cut : float = 0.25
+export var jump_gravity_max : float = 500
+export var jump_hang_treshold : float = 2.0
+export var jump_hang_gravity_mult : float = 0.1
 # Timers
-@export var jump_coyote : float = 0.08
-@export var jump_buffer : float = 0.1
+export var jump_coyote : float = 0.08
+export var jump_buffer : float = 0.1
 
 var jump_coyote_timer : float = 0
 var jump_buffer_timer : float = 0
@@ -62,16 +62,9 @@ func _physics_process(delta: float) -> void:
 
 func apply_velocity() -> void:
 	if is_jumping:
-		set_velocity(velocity)
-		set_up_direction(Vector2.UP)
-		move_and_slide()
-		velocity = velocity
+		velocity = move_and_slide(velocity, Vector2.UP)
 	else:
-		set_velocity(velocity)
-		# TODOConverter40 looks that snap in Godot 4.0 is float, not vector like in Godot 3 - previous value `Vector2(0, 16)`
-		set_up_direction(Vector2.UP)
-		move_and_slide()
-		velocity = velocity
+		velocity = move_and_slide_with_snap(velocity, Vector2(0, 16), Vector2.UP)
 
 
 func x_movement(delta: float) -> void:
@@ -121,7 +114,7 @@ func jump_logic(_delta: float) -> void:
 		is_jumping = true
 		jump_coyote_timer = 0
 		jump_buffer_timer = 0
-		# If falling, account for that lost speed
+		 # If falling, account for that lost speed
 		if velocity.y > 0:
 			velocity.y -= velocity.y
 		
