@@ -1,7 +1,1 @@
 res://World/World.tscn
-res://Platforms/CirclePlatform.tscn
-res://Player/Player.gd
-res://Player/Player.tscn
-res://Platforms/MovingPlatform.tscn
-res://Platforms/MovingPlatform.gd
-res://World/World.gd
