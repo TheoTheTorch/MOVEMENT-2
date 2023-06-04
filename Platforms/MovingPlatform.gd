@@ -14,7 +14,7 @@ func set_move_to(new_value: Vector2) -> void:
 		for child in get_children():
 			child.position = move_to
 
-@export var speed: int = 64 
+@export var speed: int = 64
 @export var delay: float = 0.4 ## delay (sec) before moving to move_to
 @export var line_width : float = 4.0
 

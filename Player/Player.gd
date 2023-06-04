@@ -1,6 +1,6 @@
 extends CharacterBody2D
 ## This character controller was created with the intent of being a decent starting point for Platformers.
-## 
+##
 ## Instead of teaching the basics, I tried to implement more advanced considerations.
 ## That's why I call it 'Movement 2'. This is a sequel to learning demos of similar a kind.
 ## Beyond coyote time and a jump buffer I go through all the things listed in the following video:
@@ -54,32 +54,32 @@ func _physics_process(delta: float) -> void:
 	x_movement(delta)
 	jump_logic(delta)
 	apply_gravity(delta)
-	
+
 	timers(delta)
 	move_and_slide()
 
 
 func x_movement(delta: float) -> void:
 	x_dir = get_input()["x"]
-	
+
 	# Stop if we're not doing movement inputs.
-	if x_dir == 0: 
+	if x_dir == 0:
 		velocity.x = Vector2(velocity.x, 0).move_toward(Vector2(0,0), deceleration * delta).x
 		return
-	
+
 	# If we are doing movement inputs and above max speed, don't accelerate nor decelerate
 	# Except if we are turning
 	# (This keeps our momentum gained from outside or slopes)
 	if abs(velocity.x) >= max_speed and sign(velocity.x) == x_dir:
 		return
-	
+
 	# Are we turning?
 	# Deciding between acceleration and turn_acceleration
 	var accel_rate : float = acceleration if sign(velocity.x) == x_dir else turning_acceleration
-	
+
 	# Accelerate
 	velocity.x += x_dir * accel_rate * delta
-	
+
 	set_direction(x_dir) # This is purely for visuals
 
 
@@ -100,7 +100,7 @@ func jump_logic(_delta: float) -> void:
 		is_jumping = false
 	if get_input()["just_jump"]:
 		jump_buffer_timer = jump_buffer
-	
+
 	# Jump if grounded, there is jump input, and we aren't jumping already
 	if jump_coyote_timer > 0 and jump_buffer_timer > 0 and not is_jumping:
 		is_jumping = true
@@ -109,43 +109,43 @@ func jump_logic(_delta: float) -> void:
 		# If falling, account for that lost speed
 		if velocity.y > 0:
 			velocity.y -= velocity.y
-		
+
 		velocity.y = -jump_force
-	
+
 	# We're not actually interested in checking if the player is holding the jump button
 #	if get_input()["jump"]:pass
-	
+
 	# Cut the velocity if let go of jump. This means our jumpheight is varaiable
 	# This should only happen when moving upwards, as doing this while falling would lead to
 	# The ability to studder our player mid falling
 	if get_input()["released_jump"] and velocity.y < 0:
 		velocity.y -= (jump_cut * velocity.y)
-	
+
 	# This way we won't start slowly descending / floating once hit a ceiling
 	# The value added to the treshold is arbritary,
-	# But it solves a problem where jumping into 
+	# But it solves a problem where jumping into
 	if is_on_ceiling(): velocity.y = jump_hang_treshold + 100.0
 
 
 func apply_gravity(delta: float) -> void:
 	var applied_gravity : float = 0
-	
+
 	# No gravity if we are grounded
 	if jump_coyote_timer > 0:
 		return
-	
+
 	# Normal gravity limit
 	if velocity.y <= gravity_max:
 		applied_gravity = gravity_acceleration * delta
-	
+
 	# If moving upwards while jumping, the limit is jump_gravity_max to achieve lower gravity
 	if (is_jumping and velocity.y < 0) and velocity.y > jump_gravity_max:
 		applied_gravity = 0
-	
+
 	# Lower the gravity at the peak of our jump (where velocity is the smallest)
 	if is_jumping and abs(velocity.y) < jump_hang_treshold:
 		applied_gravity *= jump_hang_gravity_mult
-	
+
 	velocity.y += applied_gravity
 
 
