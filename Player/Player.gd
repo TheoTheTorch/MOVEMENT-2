@@ -60,22 +60,24 @@ func _physics_process(delta: float) -> void:
 
 
 func x_movement(delta: float) -> void:
-	x_dir = get_input()["x"]
+	x_dir = get_input().x
 
-	# Stop if we're not doing movement inputs.
+	# Brake if we're not doing movement inputs.
 	if x_dir == 0:
-		velocity.x = Vector2(velocity.x, 0).move_toward(Vector2(0,0), deceleration * delta).x
+		velocity.x = Vector2(velocity.x, 0).move_toward(Vector2.ZERO, deceleration * delta).x
 		return
+
+	var does_input_dir_follow_momentum = sign(velocity.x) == x_dir
 
 	# If we are doing movement inputs and above max speed, don't accelerate nor decelerate
 	# Except if we are turning
 	# (This keeps our momentum gained from outside or slopes)
-	if abs(velocity.x) >= max_speed and sign(velocity.x) == x_dir:
+	if abs(velocity.x) >= max_speed and does_input_dir_follow_momentum:
 		return
 
 	# Are we turning?
 	# Deciding between acceleration and turn_acceleration
-	var accel_rate : float = acceleration if sign(velocity.x) == x_dir else turning_acceleration
+	var accel_rate : float = acceleration if does_input_dir_follow_momentum else turning_acceleration
 
 	# Accelerate
 	velocity.x += x_dir * accel_rate * delta
@@ -98,7 +100,7 @@ func jump_logic(_delta: float) -> void:
 	if is_on_floor():
 		jump_coyote_timer = jump_coyote
 		is_jumping = false
-	if get_input()["just_jump"]:
+	if get_input().just_jump:
 		jump_buffer_timer = jump_buffer
 
 	# Jump if grounded, there is jump input, and we aren't jumping already
@@ -113,12 +115,12 @@ func jump_logic(_delta: float) -> void:
 		velocity.y = -jump_force
 
 	# We're not actually interested in checking if the player is holding the jump button
-#	if get_input()["jump"]:pass
+#	if get_input().jump:pass
 
 	# Cut the velocity if let go of jump. This means our jumpheight is variable
 	# This should only happen when moving upwards, as doing this while falling would lead to
 	# The ability to stutter our player mid falling
-	if get_input()["released_jump"] and velocity.y < 0:
+	if get_input().released_jump and velocity.y < 0:
 		velocity.y -= (jump_cut * velocity.y)
 
 	# This way we won't start slowly descending / floating once hit a ceiling
