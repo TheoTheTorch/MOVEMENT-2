@@ -8,7 +8,7 @@ extends CharacterBody2D
 ## Except for separate air and ground acceleration, as I don't think it's necessary.
 
 
-# BASIC MOVEMENT VARAIABLES ---------------- #
+# BASIC MOVEMENT VARIABLES ---------------- #
 var face_direction := 1
 var x_dir := 1
 
@@ -23,7 +23,7 @@ var x_dir := 1
 @export var gravity_max : float = 1020
 # ------------- #
 
-# JUMP VARAIABLES ------------------- #
+# JUMP VARIABLES ------------------- #
 @export var jump_force : float = 1400
 @export var jump_cut : float = 0.25
 @export var jump_gravity_max : float = 500
@@ -115,14 +115,14 @@ func jump_logic(_delta: float) -> void:
 	# We're not actually interested in checking if the player is holding the jump button
 #	if get_input()["jump"]:pass
 
-	# Cut the velocity if let go of jump. This means our jumpheight is varaiable
+	# Cut the velocity if let go of jump. This means our jumpheight is variable
 	# This should only happen when moving upwards, as doing this while falling would lead to
-	# The ability to studder our player mid falling
+	# The ability to stutter our player mid falling
 	if get_input()["released_jump"] and velocity.y < 0:
 		velocity.y -= (jump_cut * velocity.y)
 
 	# This way we won't start slowly descending / floating once hit a ceiling
-	# The value added to the treshold is arbritary,
+	# The value added to the threshold is arbitrary,
 	# But it solves a problem where jumping into
 	if is_on_ceiling(): velocity.y = jump_hang_treshold + 100.0
 
@@ -150,7 +150,7 @@ func apply_gravity(delta: float) -> void:
 
 
 func timers(delta: float) -> void:
-	# Using timer nodes here would mean unnececary functions and node calls
+	# Using timer nodes here would mean unnecessary functions and node calls
 	# This way everything is contained in just 1 script with no node requirements
 	jump_coyote_timer -= delta
 	jump_buffer_timer -= delta
