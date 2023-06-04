@@ -39,14 +39,14 @@ var is_jumping := false
 # ----------------------------------- #
 
 
-# All iputs we want to keep track of
+# All inputs we want to keep track of
 func get_input() -> Dictionary:
 	return {
-		"x": int(Input.is_action_pressed("ui_right")) - int(Input.is_action_pressed("ui_left")),
-		"y": int(Input.is_action_pressed("ui_down")) - int(Input.is_action_pressed("ui_up")),
-		"just_jump": Input.is_action_just_pressed("jump") == true,
-		"jump": Input.is_action_pressed("jump") == true,
-		"released_jump": Input.is_action_just_released("jump") == true
+		"x": roundi(Input.get_axis("move_left", "move_right")),
+		"y": roundi(Input.get_axis("move_up", "move_down")),
+		"just_jump": Input.is_action_just_pressed("jump"),
+		"jump": Input.is_action_pressed("jump"),
+		"released_jump": Input.is_action_just_released("jump"),
 	}
 
 
