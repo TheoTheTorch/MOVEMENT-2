@@ -10,7 +10,7 @@ extends Node2D
 @export var move_to := Vector2(0, -128) : set = set_move_to
 func set_move_to(new_value: Vector2) -> void:
 	move_to = new_value
-	if OS.has_feature("editor") and get_children() != []:
+	if Engine.is_editor_hint() and get_children() != []:
 		for child in get_children():
 			child.position = move_to
 
@@ -20,10 +20,13 @@ func set_move_to(new_value: Vector2) -> void:
 
 func _ready() -> void:
 	set_move_to(move_to)
-	if OS.has_feature("editor") and get_children() != []:
+	
+	if get_children() != []:
 		set_process(false)
 		for child in get_children():
 			start_tween(child)
+
+
 func _process(_delta: float) -> void:
 	queue_redraw()
 
