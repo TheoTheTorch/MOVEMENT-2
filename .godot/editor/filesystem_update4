@@ -1,0 +1,5 @@
+res://World/World.tscn
+res://Player/Player.tscn
+res://ScreenCamera/ScreenCamera.tscn
+res://Platforms/MovingPlatform.tscn
+res://Platforms/TileMap.tscn

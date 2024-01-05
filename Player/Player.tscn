@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cvboky6pqlyk0"]
+[gd_scene load_steps=8 format=3 uid="uid://bo3d73okirfl0"]
 
 [ext_resource type="Script" path="res://Player/Player.gd" id="1"]
 [ext_resource type="Script" path="res://Player/Sprite.gd" id="2"]
@@ -42,7 +42,7 @@ tracks/0/keys = {
 "values": [Vector2(1, 1), Vector2(1.4, 1), Vector2(1, 1)]
 }
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_1lb64"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_y1lv5"]
 _data = {
 "Jump": SubResource("3"),
 "Land": SubResource("4")
@@ -50,8 +50,6 @@ _data = {
 
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 z_index = 10
-collision_mask = 14
-floor_snap_length = 16.0
 script = ExtResource("1")
 acceleration = 4032.0
 turning_acceleration = 13440.0
@@ -89,5 +87,5 @@ polygon = PackedVector2Array(-16, -16, -16, 16, 16, 16, 16, -16)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite"]
 libraries = {
-"": SubResource("AnimationLibrary_1lb64")
+"": SubResource("AnimationLibrary_y1lv5")
 }

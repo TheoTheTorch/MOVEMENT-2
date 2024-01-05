@@ -4,5 +4,5 @@ extends CharacterBody2D
 
 
 func _physics_process(delta: float) -> void:
-	# Dividing by 2*PI is because 2PI radians is one whole rotation
+	# The reason begind dividing by 2*PI is because 2PI radians is a whole rotation
 	rotation += (rotation_speed) / (2*PI) * delta
