@@ -12,21 +12,21 @@ extends CharacterBody2D
 var face_direction := 1
 var x_dir := 1
 
-@export var max_speed: float = 560
-@export var acceleration: float = 2880
-@export var turning_acceleration : float = 9600
+@export var max_speed: float = 600
+@export var acceleration: float = 3000
+@export var turning_acceleration : float = 13500
 @export var deceleration: float = 3200
 # ------------------------------------------ #
 
 # GRAVITY ----- #
-@export var gravity_acceleration : float = 3840
-@export var gravity_max : float = 1020
+@export var gravity_acceleration : float = 4500
+@export var gravity_max : float = 1000
 # ------------- #
 
 # JUMP VARIABLES ------------------- #
-@export var jump_force : float = 1400
-@export var jump_cut : float = 0.25
-@export var jump_gravity_max : float = 500
+@export var jump_force : float = 1300
+@export var jump_cut : float = 0.2
+@export var jump_gravity_acceleration : float = 4000
 @export var jump_hang_treshold : float = 2.0
 @export var jump_hang_gravity_mult : float = 0.1
 # Timers
@@ -108,10 +108,7 @@ func jump_logic(_delta: float) -> void:
 		is_jumping = true
 		jump_coyote_timer = 0
 		jump_buffer_timer = 0
-		# If falling, account for that lost speed
-		if velocity.y > 0:
-			velocity.y -= velocity.y
-
+	
 		velocity.y = -jump_force
 
 	# We're not actually interested in checking if the player is holding the jump button
@@ -140,9 +137,9 @@ func apply_gravity(delta: float) -> void:
 	if velocity.y <= gravity_max:
 		applied_gravity = gravity_acceleration * delta
 
-	# If moving upwards while jumping, the limit is jump_gravity_max to achieve lower gravity
-	if (is_jumping and velocity.y < 0) and velocity.y > jump_gravity_max:
-		applied_gravity = 0
+	# If moving upwards while jumping, use jump_gravity_acceleration to achieve lower gravity
+	if is_jumping and velocity.y < 0:
+		applied_gravity = jump_gravity_acceleration * delta
 
 	# Lower the gravity at the peak of our jump (where velocity is the smallest)
 	if is_jumping and abs(velocity.y) < jump_hang_treshold:

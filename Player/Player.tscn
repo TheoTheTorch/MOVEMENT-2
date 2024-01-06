@@ -53,13 +53,6 @@ z_index = 10
 collision_mask = 14
 floor_snap_length = 16.0
 script = ExtResource("1")
-acceleration = 4032.0
-turning_acceleration = 13440.0
-deceleration = 4480.0
-jump_force = 1200.0
-jump_cut = 0.4
-jump_gravity_max = 1000.0
-jump_hang_gravity_mult = 0.05
 
 [node name="SquareCollisionShape" type="CollisionShape2D" parent="."]
 position = Vector2(0, -4)
