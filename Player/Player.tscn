@@ -78,7 +78,7 @@ player_path = NodePath("..")
 [node name="Polygon2D" type="Polygon2D" parent="Sprite"]
 position = Vector2(0, -8)
 color = Color(0.964706, 0.952941, 0.298039, 1)
-polygon = PackedVector2Array(-16, -16, -16, 16, 16, 16, 16, -16)
+polygon = PackedVector2Array(-19, -18, -16.2806, 12.8197, -12.3612, 16, 13.3018, 16, 16, 12.6567, 16, -7.71495, 6, -16)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite"]
 libraries = {
