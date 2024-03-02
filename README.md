@@ -3,7 +3,7 @@
 This character controller demo was created with the intent of being a decent starting point for Precision Platformers using Godot.
 Instead of teaching the basics, I tried to implement more advanced considerations.
 
-That's why I call it 'Movement 2'. This is a sequel to learning demos of similar a kind.
+That's why I call it 'Movement 2'. This is a sequel to learning demos of a similar kind.
 
 After playing around with the demo, you could potentially just copy over the Player.gd script and form it to your needs.
 
