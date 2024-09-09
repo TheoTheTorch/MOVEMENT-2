@@ -24,7 +24,9 @@ var x_dir := 1
 # ------------- #
 
 # JUMP VARIABLES ------------------- #
-@export var jump_force : float = 1300
+## Height in world units. For a tile-based game, you likely want to multiply
+## by tile size to tune in numbers of tiles.
+@export var jump_height : float = 211.3
 @export var jump_cut : float = 0.2
 @export var jump_gravity_acceleration : float = 4000
 @export var jump_hang_treshold : float = 2.0
@@ -108,8 +110,10 @@ func jump_logic(_delta: float) -> void:
 		is_jumping = true
 		jump_coyote_timer = 0
 		jump_buffer_timer = 0
-	
-		velocity.y = -jump_force
+
+		# Compute the jump force based on gravity. Not 100% accurate since we
+		# vary gravity at different phases of the jump, but a useful estimate.
+		velocity.y = -sqrt(2 * jump_gravity_acceleration * jump_height)
 
 	# We're not actually interested in checking if the player is holding the jump button
 #	if get_input().jump:pass
