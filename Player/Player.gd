@@ -27,7 +27,12 @@ var x_dir := 1
 @export var jump_force : float = 1300
 @export var jump_cut : float = 0.2
 @export var jump_gravity_acceleration : float = 4000
-@export var jump_hang_treshold : float = 2.0
+## Speed that marks the peak of our jump. (This close to zero speed we're
+## switching from moving up to moving down.) During this peak, we reduce
+## gravity with jump_hang_gravity_mult to give some hang time.
+@export var jump_hang_speed_threshold : float = 2.0
+## Speed multiplier for the peak of our jump to reduce gravity when within
+## jump_hang_speed_threshold.
 @export var jump_hang_gravity_mult : float = 0.1
 # Timers
 @export var jump_coyote : float = 0.08
@@ -120,10 +125,11 @@ func jump_logic(_delta: float) -> void:
 	if get_input().released_jump and velocity.y < 0:
 		velocity.y -= (jump_cut * velocity.y)
 
-	# This way we won't start slowly descending / floating once hit a ceiling
-	# The value added to the threshold is arbitrary,
-	# But it solves a problem where jumping into
-	if is_on_ceiling(): velocity.y = jump_hang_treshold + 100.0
+	# This way we won't start slowly descending / floating once we hit a ceiling
+	# The value added to the threshold is arbitrary, But it solves a problem
+	# where jumping into a ceiling triggers jump_hang_speed_threshold gravity.
+	if is_on_ceiling():
+		velocity.y = jump_hang_speed_threshold + 100.0
 
 
 func apply_gravity(delta: float) -> void:
@@ -142,7 +148,7 @@ func apply_gravity(delta: float) -> void:
 		applied_gravity = jump_gravity_acceleration * delta
 
 	# Lower the gravity at the peak of our jump (where velocity is the smallest)
-	if is_jumping and abs(velocity.y) < jump_hang_treshold:
+	if is_jumping and abs(velocity.y) < jump_hang_speed_threshold:
 		applied_gravity *= jump_hang_gravity_mult
 
 	velocity.y += applied_gravity
