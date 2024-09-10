@@ -20,7 +20,9 @@ var x_dir := 1
 
 # GRAVITY ----- #
 @export var gravity_acceleration : float = 4500
-@export var gravity_max : float = 1000
+## Won't apply gravity if falling faster than this speed to prevent massive
+## acceleration in long falls.
+@export_range(0, 5000) var max_gravity_falling_speed : float = 1000
 # ------------- #
 
 # JUMP VARIABLES ------------------- #
@@ -144,8 +146,9 @@ func apply_gravity(delta: float) -> void:
 		return
 
 	# Normal gravity limit
-	if velocity.y <= gravity_max:
+	if velocity.y <= max_gravity_falling_speed:
 		applied_gravity = gravity_acceleration * delta
+	# else: we're falling too fast for more gravity.
 
 	# If moving upwards while jumping, use jump_gravity_acceleration to achieve lower gravity
 	if is_jumping and velocity.y < 0:
